@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    aerospike: #TODO: Replace with the real Aerospike host and port if needed
+      host: 127.0.0.1
+      port: 3000 #Default Aerospike port

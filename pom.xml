@@ -9,9 +9,9 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <java.version>17</java.version> <!-- Specify Java version -->
-        <spring-boot.version>3.3.5</spring-boot.version> <!-- Use a stable Spring Boot version -->
-        <spring-data-aerospike.version>4.1.0</spring-data-aerospike.version>
+        <java.version>17</java.version>
+        <spring-boot.version>3.3.5</spring-boot.version>
+        <spring-data-aerospike.version>4.8.0</spring-data-aerospike.version>
         <junit.version>5.8.2</junit.version>
         <mockito.version>3.12.4</mockito.version>
         <lombok.version>1.18.34</lombok.version>

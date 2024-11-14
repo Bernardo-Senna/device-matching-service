@@ -6,5 +6,5 @@ import com.devicematching.model.UserAgent;
 import java.util.Optional;
 
 public interface UserAgentService {
-    Optional<Device> matchDevice(UserAgent userAgent);
+    Optional<Device> getMatchingDevice(String userAgentInput);
 }
