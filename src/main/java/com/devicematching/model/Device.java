@@ -2,10 +2,12 @@ package com.devicematching.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class Device {
     private UUID id; //unique device identifier
