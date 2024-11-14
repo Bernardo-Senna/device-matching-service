@@ -9,9 +9,9 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <spring-boot.version>3.3.5</spring-boot.version>
-        <spring-data-aerospike.version>4.8.0</spring-data-aerospike.version>
+        <aerospike-client.version>8.1.4</aerospike-client.version>
         <junit.version>5.8.2</junit.version>
         <mockito.version>3.12.4</mockito.version>
         <lombok.version>1.18.34</lombok.version>
@@ -25,11 +25,11 @@
             <version>${spring-boot.version}</version>
         </dependency>
 
-        <!-- Spring Data Aerospike -->
+        <!-- Aerospike Database client-->
         <dependency>
             <groupId>com.aerospike</groupId>
-            <artifactId>spring-data-aerospike</artifactId>
-            <version>${spring-data-aerospike.version}</version>
+            <artifactId>aerospike-client-jdk21</artifactId>
+            <version>${aerospike-client.version}</version>
         </dependency>
 
         <!-- JUnit for Testing -->
