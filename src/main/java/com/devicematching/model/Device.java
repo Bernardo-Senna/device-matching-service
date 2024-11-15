@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Device {
-    private UUID id; //unique device identifier
+    private String id; //unique device identifier based on user-agent info
     private int hitCount; //number of times this device has been seen
     private String osName; //Operating system name (e.g. macOS, Windows, etc.)
     private String osVersion; //Operating system version

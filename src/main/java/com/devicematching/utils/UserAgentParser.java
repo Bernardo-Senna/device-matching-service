@@ -12,8 +12,8 @@ public class UserAgentParser {
     private static final Pattern USER_AGENT_PATTERN = Pattern.compile(
             // Capture browser name and version (ignores listing specific browsers)
             "(?<browser>\\b[a-zA-Z]+)/(?<browserVersion>[\\d.]+).*" +
-            // Capture OS name and version inside parentheses
-            "\\((?<os>[^;]+)\\s(?<osVersion>[\\d._]+)");
+                    // Capture OS name and version inside parentheses
+                    "\\((?<os>[^;]+)\\s(?<osVersion>[\\d._]+)");
 
     public UserAgent parse(String userAgentInput) {
         Matcher matcher = USER_AGENT_PATTERN.matcher(userAgentInput);
