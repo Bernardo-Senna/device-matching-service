@@ -93,7 +93,7 @@ public class DeviceService {
                     record.getString("browserVersion")
             );
         }
-        return null; // Device not found
+        return null;
     }
 
     public List<Device> getDevicesByOSName(String osName) {
@@ -134,7 +134,7 @@ public class DeviceService {
         return devices;
     }
 
-    public void deleteDeviceById(List<String> deviceIds) {
+    public void deleteDevicesByIds(List<String> deviceIds) {
         for (String id : deviceIds) {
             Key key = new Key(NAMESPACE, SET_NAME, id);
             aerospikeClient.delete(null, key);
