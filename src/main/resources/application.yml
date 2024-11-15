@@ -1,9 +1,2 @@
 server:
   port: 8080
-
-spring:
-  data:
-    aerospike:
-      host: 127.0.0.1    # Your Aerospike server IP
-      port: 3000         # Default Aerospike port
-      namespace: device  # Define a namespace for your data

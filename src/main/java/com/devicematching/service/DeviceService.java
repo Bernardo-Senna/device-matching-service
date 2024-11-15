@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import static org.yaml.snakeyaml.tokens.Token.ID.Key;
 
 @Service
 public class DeviceService {
@@ -24,7 +21,7 @@ public class DeviceService {
     private final AerospikeClient aerospikeClient;
     private final UserAgentParser userAgentParser;
 
-    private static final String NAMESPACE = "device";
+    private static final String NAMESPACE = "test";
     private static final String SET_NAME = "devices";
 
     @Autowired
@@ -37,19 +34,20 @@ public class DeviceService {
         UserAgent userAgent = userAgentParser.parse(userAgentString);
 
         // Create a composite key based on user agent details
-        Key key = new Key(NAMESPACE, SET_NAME,
-                userAgent.getOsName() + "_" +
-                        userAgent.getOsVersion() + "_" +
-                        userAgent.getBrowserName() + "_" +
-                        userAgent.getBrowserVersion());
+        String deviceKey = userAgent.getOsName() + "_" +
+                userAgent.getOsVersion() + "_" +
+                userAgent.getBrowserName() + "_" +
+                userAgent.getBrowserVersion();
+
+        Key key = new Key(NAMESPACE, SET_NAME, deviceKey);
 
         // Retrieve the record from Aerospike
         Record record = aerospikeClient.get(null, key);
         Device device = new Device();
 
         if (record != null) {
-            device.setId(UUID.fromString(record.getString("id"))); // Set the ID from the matched device
-            device.setOsName(record.getString("osName")); // Populate the device fields
+            device.setId(record.getString("id"));
+            device.setOsName(record.getString("osName"));
             device.setOsVersion(record.getString("osVersion"));
             device.setBrowserName(record.getString("browserName"));
             device.setBrowserVersion(record.getString("browserVersion"));
@@ -61,25 +59,28 @@ public class DeviceService {
 
         } else {
             // Device doesn't exist, create a new one
-            UUID newDeviceId = UUID.randomUUID();
-            device.setId(newDeviceId);
+            device.setId(deviceKey);
             device.setHitCount(1); // Initialize hit count to 1
+            device.setOsName(userAgent.getOsName());
+            device.setOsVersion(userAgent.getOsVersion());
+            device.setBrowserName(userAgent.getBrowserName());
+            device.setBrowserVersion(userAgent.getBrowserVersion());
 
             // Store the new device in Aerospike
             aerospikeClient.put(null, key,
-                    new Bin("id", newDeviceId.toString()),
+                    new Bin("id", device.getId()),
                     new Bin("hitCount", device.getHitCount()),
-                    new Bin("osName", userAgent.getOsName()),
-                    new Bin("osVersion", userAgent.getOsVersion()),
-                    new Bin("browserName", userAgent.getBrowserName()),
-                    new Bin("browserVersion", userAgent.getBrowserVersion()));
+                    new Bin("osName", device.getOsName()),
+                    new Bin("osVersion", device.getOsVersion()),
+                    new Bin("browserName", device.getBrowserName()),
+                    new Bin("browserVersion", device.getBrowserVersion()));
         }
 
         return device;
     }
 
-    public Device getDeviceById(UUID id) {
-        Key key = new Key(NAMESPACE, SET_NAME, id.toString());
+    public Device getDeviceById(String id) {
+        Key key = new Key(NAMESPACE, SET_NAME, id);
         Record record = aerospikeClient.get(null, key);
 
         if (record != null) {
@@ -121,7 +122,7 @@ public class DeviceService {
 
         aerospikeClient.query(queryPolicy, statement, (key, record) -> {
             Device device = new Device();
-            device.setId(UUID.fromString(record.getString("id")));
+            device.setId(record.getString("id"));
             device.setHitCount(record.getInt("hitCount"));
             device.setOsName(record.getString("osName"));
             device.setOsVersion(record.getString("osVersion"));
@@ -133,8 +134,10 @@ public class DeviceService {
         return devices;
     }
 
-    public void deleteDeviceById(UUID id) {
-        Key key = new Key(NAMESPACE, SET_NAME, id.toString());
-        aerospikeClient.delete(null, key);
+    public void deleteDeviceById(List<String> deviceIds) {
+        for (String id : deviceIds) {
+            Key key = new Key(NAMESPACE, SET_NAME, id);
+            aerospikeClient.delete(null, key);
+        }
     }
 }
